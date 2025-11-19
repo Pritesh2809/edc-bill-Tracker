@@ -1,92 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trip Expense Tracker - Cloud Edition</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trip Expense Tracker - Cloud Edition</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <script src="https://cdn.jsdelivr.net/npm/docx@7.8.2/build/index.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docx@7.8.2/build/index.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
 
-    <style>
-        :root {
-            --primary: #84cc16;
-            --primary-dark: #65a30d;
-            --primary-light: #ecfccb;
-            --sidebar-bg: #84cc16;
-            --bg-main: #f3f4f6;
-            --surface: #ffffff;
-            --text-main: #1f2937;
-            --text-muted: #6b7280;
-            --border: #e5e7eb;
-            --danger: #ef4444;
-            --radius: 8px;
-            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-        }
+  <style>
+    :root {
+      --primary: #84cc16;
+      --primary-dark: #65a30d;
+      --primary-light: #ecfccb;
+      --sidebar-bg: #84cc16;
+      --bg-main: #f3f4f6;
+      --surface: #ffffff;
+      --text-main: #1f2937;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --danger: #ef4444;
+      --radius: 8px;
+      --shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg-main); color: var(--text-main); font-size: 14px; height: 100vh; overflow: hidden; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg-main); color: var(--text-main); font-size: 14px; height: 100vh; overflow: hidden; }
 
-        /* --- Loading Screen --- */
-        #loader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: white; z-index: 10000; display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-        }
-        .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    /* --- Loading Screen --- */
+    #loader {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: white; z-index: 10000; display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+    }
+    .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* --- Toast --- */
-        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
-        .toast { background: var(--surface); padding: 16px 24px; border-radius: var(--radius); box-shadow: var(--shadow); border-left: 4px solid var(--primary); animation: slideIn 0.3s ease-out; }
-        .toast.error { border-left-color: var(--danger); }
-        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    /* --- Toast --- */
+    #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+    .toast { background: var(--surface); padding: 16px 24px; border-radius: var(--radius); box-shadow: var(--shadow); border-left: 4px solid var(--primary); animation: slideIn 0.3s ease-out; }
+    .toast.error { border-left-color: var(--danger); }
+    @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
 
-        /* --- Layouts --- */
-        .login-wrapper { display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0fdf4; }
-        .login-box { background: var(--surface); padding: 40px; border-radius: 16px; box-shadow: var(--shadow); width: 100%; max-width: 400px; text-align: center; }
+    /* --- Layouts --- */
+    .login-wrapper { display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0fdf4; }
+    .login-box { background: var(--surface); padding: 40px; border-radius: 16px; box-shadow: var(--shadow); width: 100%; max-width: 400px; text-align: center; }
 
-        .dashboard-container { display: flex; height: 100vh; }
-        .sidebar { width: 260px; background: var(--sidebar-bg); color: white; padding: 20px; display: flex; flex-direction: column; z-index: 50; transition: transform 0.3s; }
-        .nav-item { padding: 12px; margin-bottom: 4px; border-radius: 6px; cursor: pointer; color: rgba(255,255,255,0.9); display: flex; justify-content: space-between; }
-        .nav-item:hover { background: rgba(255,255,255,0.2); }
-        .nav-item.active { background: white; color: var(--primary-dark); font-weight: 600; }
+    .dashboard-container { display: flex; height: 100vh; }
+    .sidebar { width: 260px; background: var(--sidebar-bg); color: white; padding: 20px; display: flex; flex-direction: column; z-index: 50; transition: transform 0.3s; }
+    .nav-item { padding: 12px; margin-bottom: 4px; border-radius: 6px; cursor: pointer; color: rgba(255,255,255,0.9); display: flex; justify-content: space-between; }
+    .nav-item:hover { background: rgba(255,255,255,0.2); }
+    .nav-item.active { background: white; color: var(--primary-dark); font-weight: 600; }
 
-        .main-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
-        .top-bar { height: 60px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; }
-        .content-scroll { flex: 1; overflow-y: auto; padding: 32px; }
+    .main-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+    .top-bar { height: 60px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; }
+    .content-scroll { flex: 1; overflow-y: auto; padding: 32px; }
 
-        .stat-card { background: var(--surface); padding: 24px; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 20px; }
-        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px; }
+    .stat-card { background: var(--surface); padding: 24px; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 20px; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px; }
 
-        table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
-        th, td { padding: 14px 20px; border-bottom: 1px solid var(--border); text-align: left; }
-        th { background: #f9fafb; font-size: 12px; color: var(--text-muted); text-transform: uppercase; }
+    table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+    th, td { padding: 14px 20px; border-bottom: 1px solid var(--border); text-align: left; }
+    th { background: #f9fafb; font-size: 12px; color: var(--text-muted); text-transform: uppercase; }
 
-        .form-input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; margin-top: 6px; }
-        .btn { padding: 10px 16px; border: none; border-radius: 6px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { background: var(--primary-dark); }
-        .btn-outline { border: 1px solid var(--border); background: white; }
+    .form-input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; margin-top: 6px; }
+    .btn { padding: 10px 16px; border: none; border-radius: 6px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-outline { border: 1px solid var(--border); background: white; }
 
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; justify-content: center; align-items: center; }
-        .modal-overlay.active { display: flex; }
-        .modal-card { background: var(--surface); width: 90%; max-width: 500px; border-radius: 12px; padding: 24px; max-height: 90vh; overflow-y: auto; }
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; justify-content: center; align-items: center; }
+    .modal-overlay.active { display: flex; }
+    .modal-card { background: var(--surface); width: 90%; max-width: 500px; border-radius: 12px; padding: 24px; max-height: 90vh; overflow-y: auto; }
 
-        .img-viewer { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:200; justify-content:center; align-items:center; }
-        .img-viewer.active { display: flex; }
+    .img-viewer { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:200; justify-content:center; align-items:center; }
+    .img-viewer.active { display: flex; }
 
-        .hidden { display: none !important; }
+    .hidden { display: none !important; }
 
-        @media (max-width: 768px) {
-            .sidebar { position: absolute; left: -260px; height: 100%; }
-            .sidebar.open { left: 0; box-shadow: 5px 0 15px rgba(0,0,0,0.1); }
-        }
-    </style>
+    @media (max-width: 768px) {
+      .sidebar { position: absolute; left: -260px; height: 100%; }
+      .sidebar.open { left: 0; box-shadow: 5px 0 15px rgba(0,0,0,0.1); }
+    }
+  </style>
 </head>
 <body>
 
@@ -94,350 +94,322 @@
 <div id="toast-container"></div>
 
 <div id="loginScreen" class="login-wrapper hidden">
-    <div class="login-box">
-        <h2 style="color: var(--primary-dark); margin-bottom: 8px;">Excel Trading</h2>
-        <p style="color: var(--text-muted); margin-bottom: 32px;">Cloud Expense Portal</p>
-        <form onsubmit="window.handleUnifiedLogin(event)">
-            <div style="text-align:left; margin-bottom:16px;">
-                <label>Email</label>
-                <input type="email" id="loginEmail" class="form-input" required>
-            </div>
-            <div style="text-align:left; margin-bottom:24px;">
-                <label>Password</label>
-                <input type="password" id="loginPass" class="form-input" required>
-            </div>
-            <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">Secure Login</button>
-        </form>
-    </div>
+  <div class="login-box">
+    <h2 style="color: var(--primary-dark); margin-bottom: 8px;">Excel Trading</h2>
+    <p style="color: var(--text-muted); margin-bottom: 32px;">Cloud Expense Portal</p>
+    <form onsubmit="window.handleUnifiedLogin(event)">
+      <div style="text-align:left; margin-bottom:16px;">
+        <label>Email</label>
+        <input type="email" id="loginEmail" class="form-input" required>
+      </div>
+      <div style="text-align:left; margin-bottom:24px;">
+        <label>Password</label>
+        <input type="password" id="loginPass" class="form-input" required>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">Secure Login</button>
+    </form>
+  </div>
 </div>
 
 <div id="mainDashboard" class="dashboard-container hidden">
-    <div class="sidebar" id="sidebar">
-        <div style="font-size: 20px; font-weight: 700; margin-bottom: 40px;">📊 Excel Trading</div>
-        <ul id="navMenu" style="list-style:none; flex:1;"></ul>
-        <div style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px;">
-            <div id="sidebarName" style="font-weight:600;">User</div>
-            <div id="sidebarRole" style="font-size:12px; opacity:0.8; margin-bottom:12px;">ROLE</div>
-            <button onclick="window.logout()" class="btn" style="width:100%; background:rgba(0,0,0,0.2); color:white;">Sign Out</button>
-        </div>
+  <div class="sidebar" id="sidebar">
+    <div style="font-size: 20px; font-weight: 700; margin-bottom: 40px;">📊 Excel Trading</div>
+    <ul id="navMenu" style="list-style:none; flex:1;"></ul>
+    <div style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px;">
+      <div id="sidebarName" style="font-weight:600;">User</div>
+      <div id="sidebarRole" style="font-size:12px; opacity:0.8; margin-bottom:12px;">ROLE</div>
+      <button onclick="window.logout()" class="btn" style="width:100%; background:rgba(0,0,0,0.2); color:white;">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="main-area">
+    <div class="top-bar">
+      <button onclick="document.getElementById('sidebar').classList.toggle('open')" class="btn btn-outline" style="border:none;">☰</button>
+      <div id="pageTitle" style="font-size:18px; font-weight:600;">Overview</div>
+      <div></div>
     </div>
 
-    <div class="main-area">
-        <div class="top-bar">
-            <button onclick="document.getElementById('sidebar').classList.toggle('open')" class="btn btn-outline" style="border:none;">☰</button>
-            <div id="pageTitle" style="font-size:18px; font-weight:600;">Overview</div>
-            <div></div>
+    <div class="content-scroll">
+      <div id="viewWelcome" class="hidden" style="text-align:center; color:var(--text-muted); margin-top:50px;">
+        <h2>Select a Trip</h2>
+        <p>Data is syncing live from the database.</p>
+      </div>
+
+      <div id="viewTrip" class="hidden">
+        <div class="card-grid">
+          <div class="stat-card">
+            <div style="font-size:12px; font-weight:600; color:var(--text-muted);">Total Spent</div>
+            <div id="statTotal" style="font-size:28px; font-weight:700;">₹0</div>
+          </div>
+          <div class="stat-card">
+            <div style="font-size:12px; font-weight:600; color:var(--text-muted);">Duration</div>
+            <div id="statDates" style="font-size:18px;">-</div>
+          </div>
+          <div class="stat-card">
+            <div style="font-size:12px; font-weight:600; color:var(--text-muted);">Receipts</div>
+            <div id="statReceipts" style="font-size:28px;">0</div>
+          </div>
         </div>
 
-        <div class="content-scroll">
-            <div id="viewWelcome" class="hidden" style="text-align:center; color:var(--text-muted); margin-top:50px;">
-                <h2>Select a Trip</h2>
-                <p>Data is syncing live from the database.</p>
-            </div>
-
-            <div id="viewTrip" class="hidden">
-                <div class="card-grid">
-                    <div class="stat-card">
-                        <div style="font-size:12px; font-weight:600; color:var(--text-muted);">Total Spent</div>
-                        <div id="statTotal" style="font-size:28px; font-weight:700;">₹0</div>
-                    </div>
-                    <div class="stat-card">
-                        <div style="font-size:12px; font-weight:600; color:var(--text-muted);">Duration</div>
-                        <div id="statDates" style="font-size:18px;">-</div>
-                    </div>
-                    <div class="stat-card">
-                        <div style="font-size:12px; font-weight:600; color:var(--text-muted);">Receipts</div>
-                        <div id="statReceipts" style="font-size:28px;">0</div>
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
-                    <button id="btnAddMember" class="btn btn-outline hidden" onclick="window.openModal('addMemberModal')">👤 Add Member</button>
-                    <button id="btnUpload" class="btn btn-primary hidden" onclick="window.openUploadModal()">➕ Add Expense</button>
-                    <button id="btnExportPdf" class="btn btn-outline hidden" onclick="window.exportToPDF()">📕 PDF</button>
-                    <button id="btnExportWord" class="btn btn-outline hidden" onclick="window.exportToWord()">📄 Word</button>
-                </div>
-
-                <div style="overflow-x:auto; background:white; border-radius:8px; box-shadow:var(--shadow);">
-                    <table id="mainTable">
-                        <thead><tr><th>Date</th><th>Place</th><th>Category</th><th>Payee</th><th>Amount</th><th>Receipt</th><th class="col-action">Action</th></tr></thead>
-                        <tbody id="tableBody"></tbody>
-                    </table>
-                </div>
-
-                <div id="adminMembersSection" class="hidden" style="margin-top:30px;">
-                    <h3>Team Members</h3>
-                    <table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Action</th></tr></thead><tbody id="membersTableBody"></tbody></table>
-                </div>
-            </div>
+        <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+          <button id="btnAddMember" class="btn btn-outline hidden" onclick="window.openModal('addMemberModal')">👤 Add Member</button>
+          <button id="btnUpload" class="btn btn-primary hidden" onclick="window.openUploadModal()">➕ Add Expense</button>
+          <button id="btnExportPdf" class="btn btn-outline hidden" onclick="window.exportToPDF()">📕 PDF</button>
+          <button id="btnExportWord" class="btn btn-outline hidden" onclick="window.exportToWord()">📄 Word</button>
         </div>
+
+        <div style="overflow-x:auto; background:white; border-radius:8px; box-shadow:var(--shadow);">
+          <table id="mainTable">
+            <thead><tr><th>Date</th><th>Place</th><th>Category</th><th>Payee</th><th>Amount</th><th>Receipt</th><th class="col-action">Action</th></tr></thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+
+        <div id="adminMembersSection" class="hidden" style="margin-top:30px;">
+          <h3>Team Members</h3>
+          <table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Action</th></tr></thead><tbody id="membersTableBody"></tbody></table>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <div id="createTripModal" class="modal-overlay"><div class="modal-card">
-    <h3>Create Trip</h3>
-    <form onsubmit="window.createTrip(event)">
-        <input id="newTripName" class="form-input" placeholder="Trip Name" required>
-        <div style="display:flex; gap:10px;">
-            <input type="date" id="newTripStart" class="form-input" required>
-            <input type="date" id="newTripEnd" class="form-input" required>
-        </div>
-        <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:10px;">
-            <button type="button" class="btn btn-outline" onclick="window.closeModal('createTripModal')">Cancel</button>
-            <button type="submit" class="btn btn-primary">Create</button>
-        </div>
-    </form>
+  <h3>Create Trip</h3>
+  <form onsubmit="window.createTrip(event)">
+    <input id="newTripName" class="form-input" placeholder="Trip Name" required>
+    <div style="display:flex; gap:10px;">
+      <input type="date" id="newTripStart" class="form-input" required>
+      <input type="date" id="newTripEnd" class="form-input" required>
+    </div>
+    <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:10px;">
+      <button type="button" class="btn btn-outline" onclick="window.closeModal('createTripModal')">Cancel</button>
+      <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+  </form>
 </div></div>
 
 <div id="addMemberModal" class="modal-overlay"><div class="modal-card">
-    <h3>Add Member</h3>
-    <form onsubmit="window.addMember(event)">
-        <input id="newMemName" class="form-input" placeholder="Name" required>
-        <input type="email" id="newMemEmail" class="form-input" placeholder="Email" required>
-        <input type="password" id="newMemPass" class="form-input" placeholder="Password" required>
-        <select id="newMemRole" class="form-input">
-            <option value="member">Member</option>
-            <option value="viewer">Viewer</option>
-        </select>
-        <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:10px;">
-            <button type="button" class="btn btn-outline" onclick="window.closeModal('addMemberModal')">Cancel</button>
-            <button type="submit" class="btn btn-primary">Add</button>
-        </div>
-    </form>
+  <h3>Add Member</h3>
+  <form onsubmit="window.addMember(event)">
+    <input id="newMemName" class="form-input" placeholder="Name" required>
+    <input type="email" id="newMemEmail" class="form-input" placeholder="Email" required>
+    <input type="password" id="newMemPass" class="form-input" placeholder="Password" required>
+    <select id="newMemRole" class="form-input">
+      <option value="member">Member</option>
+      <option value="viewer">Viewer</option>
+    </select>
+    <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:10px;">
+      <button type="button" class="btn btn-outline" onclick="window.closeModal('addMemberModal')">Cancel</button>
+      <button type="submit" class="btn btn-primary">Add</button>
+    </div>
+  </form>
 </div></div>
 
 <div id="uploadModal" class="modal-overlay"><div class="modal-card">
-    <h3>Log Expense</h3>
-    <form onsubmit="window.uploadExpense(event)">
-        <select id="expPayee" class="form-input" required></select>
-        <select id="expCat" class="form-input"><option>Food</option><option>Travel</option><option>Stay</option><option>Misc</option></select>
-        <div style="display:flex; gap:10px;">
-            <input type="number" id="expAmt" class="form-input" placeholder="Amount" required>
-            <input id="expPlace" class="form-input" placeholder="Place" required>
-        </div>
-        <input type="date" id="expDate" class="form-input" required>
-        <input type="file" id="expImgInput" class="form-input" accept="image/*" onchange="window.previewImage(this)">
-        <div id="compressMsg" style="font-size:11px; color:orange; display:none;">Compressing image...</div>
-        <img id="expPreview" style="width:100%; margin-top:10px; border-radius:4px; display:none;">
-        <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:10px;">
-            <button type="button" class="btn btn-outline" onclick="window.closeModal('uploadModal')">Cancel</button>
-            <button type="submit" class="btn btn-primary">Upload</button>
-        </div>
-    </form>
+  <h3>Log Expense</h3>
+  <form onsubmit="window.uploadExpense(event)">
+    <select id="expPayee" class="form-input" required></select>
+    <select id="expCat" class="form-input"><option>Food</option><option>Travel</option><option>Stay</option><option>Misc</option></select>
+    <div style="display:flex; gap:10px;">
+      <input type="number" id="expAmt" class="form-input" placeholder="Amount" required>
+      <input id="expPlace" class="form-input" placeholder="Place" required>
+    </div>
+    <input type="date" id="expDate" class="form-input" required>
+    <input type="file" id="expImgInput" class="form-input" accept="image/*" onchange="window.previewImage(this)">
+    <div id="compressMsg" style="font-size:11px; color:orange; display:none;">Compressing image...</div>
+    <img id="expPreview" style="width:100%; margin-top:10px; border-radius:4px; display:none;">
+    <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:10px;">
+      <button type="button" class="btn btn-outline" onclick="window.closeModal('uploadModal')">Cancel</button>
+      <button type="submit" class="btn btn-primary">Upload</button>
+    </div>
+  </form>
 </div></div>
 
 <div id="imgViewer" class="img-viewer" onclick="this.classList.remove('active')"><img id="fullImg" src=""></div>
 
 <script type="module">
-    /* -----------------------------------------------------------
-       FIREBASE CONFIGURATION
-       Paste your config object from Firebase Console below
-       ----------------------------------------------------------- */
+  /* -----------------------------------------------------------
+     FIREBASE CONFIGURATION
+     Using YOUR specific EDC-KPRCAS credentials
+     ----------------------------------------------------------- */
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase, ref, set, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
+  // YOUR ACTUAL CONFIG (EDC-BILL)
+  const firebaseConfig = {
+    apiKey: "AIzaSyDWkqAyfudGQgYTOn3jPRsDpQ1l615Doxs",
+    authDomain: "edc-bill.firebaseapp.com",
+    databaseURL: "https://edc-bill-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "edc-bill",
+    storageBucket: "edc-bill.firebasestorage.app",
+    messagingSenderId: "744845217352",
+    appId: "1:744845217352:web:8b149b26e5cc052029d27d",
+    measurementId: "G-QZF4SK9ZX4"
+  };
 
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-        const firebaseConfig = {
-        apiKey: "AIzaSyDWkqAyfudGQgYTOn3jPRsDpQ1l615Doxs",
-        authDomain: "edc-bill.firebaseapp.com",
-        databaseURL: "https://edc-bill-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId: "edc-bill",
-        storageBucket: "edc-bill.firebasestorage.app",
-        messagingSenderId: "744845217352",
-        appId: "1:744845217352:web:8b149b26e5cc052029d27d",
-        measurementId: "G-QZF4SK9ZX4"
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // Global State
+  let globalData = { users: {}, trips: {}, expenses: {} };
+  let currentUser = null;
+  let currentTripId = null;
+
+  // --- Database Listeners (Realtime Sync) ---
+  const dbRef = ref(db);
+
+  onValue(dbRef, (snapshot) => {
+    document.getElementById('loader').style.display = 'none';
+    const val = snapshot.val();
+
+    if (!val) {
+      // Initialize DB if empty
+      seedDatabase();
+    } else {
+      // Normalize data structure
+      globalData = {
+        users: val.users || {},
+        trips: val.trips || {},
+        expenses: val.expenses || {}
+      };
+
+      // If logged in, refresh UI instantly
+      if (currentUser) {
+        initDashboard();
+        if (currentTripId) loadTrip(currentTripId);
+      } else {
+        document.getElementById('loginScreen').classList.remove('hidden');
+      }
+    }
+  });
+
+  function seedDatabase() {
+    // Create default Admin if DB is empty
+    const adminId = 'u' + Date.now();
+    const updates = {};
+    updates['users/' + adminId] = {
+      id: adminId,
+      name: 'Admin',
+      email: 'edc@kprcas.ac.in',
+      pass: '1234',
+      role: 'admin'
     };
+    update(ref(db), updates);
+  }
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
+  // --- Auth Functions ---
+  window.handleUnifiedLogin = (e) => {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value.trim();
+    const pass = document.getElementById('loginPass').value.trim();
 
+    const usersArr = Object.values(globalData.users);
+    const user = usersArr.find(u => u.email === email && u.pass === pass);
 
+    if (user) {
+      currentUser = user;
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('mainDashboard').classList.remove('hidden');
+      initDashboard();
+      showToast(`Connected as ${user.name}`);
+    } else {
+      showToast('Invalid ID or Password', 'error');
+    }
+  };
 
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, set, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+  window.logout = () => {
+    currentUser = null;
+    currentTripId = null;
+    location.reload();
+  };
 
-    // REPLACE THIS WITH YOUR ACTUAL FIREBASE CONFIG
-    const firebaseConfig = {
-        apiKey: "AIzaSy...",
-        authDomain: "your-project.firebaseapp.com",
-        databaseURL: "https://your-project-default-rtdb.firebaseio.com",
-        projectId: "your-project",
-        storageBucket: "your-project.appspot.com",
-        messagingSenderId: "123...",
-        appId: "1:123..."
-    };
+  // --- Dashboard Logic ---
+  function initDashboard() {
+    document.getElementById('sidebarName').innerText = currentUser.name;
+    document.getElementById('sidebarRole').innerText = currentUser.role.toUpperCase();
 
-    /* ----------------------------------------------------------- */
+    // Controls Visibility
+    const isAdmin = currentUser.role === 'admin';
+    const isMember = currentUser.role === 'member';
+    const isViewer = currentUser.role === 'viewer';
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
-    // Global State
-    let globalData = { users: {}, trips: {}, expenses: {} };
-    let currentUser = null;
-    let currentTripId = null;
-
-    // --- Database Listeners (Realtime Sync) ---
-    const dbRef = ref(db);
-
-    onValue(dbRef, (snapshot) => {
-        document.getElementById('loader').style.display = 'none';
-        const val = snapshot.val();
-
-        if (!val) {
-            // Initialize DB if empty
-            seedDatabase();
-        } else {
-            // Normalize data structure (Firebase returns objects, we want arrays sometimes)
-            globalData = {
-                users: val.users || {},
-                trips: val.trips || {},
-                expenses: val.expenses || {}
-            };
-
-            // If logged in, refresh UI instantly
-            if (currentUser) {
-                initDashboard();
-                if (currentTripId) loadTrip(currentTripId);
-            } else {
-                document.getElementById('loginScreen').classList.remove('hidden');
-            }
-        }
-    });
-
-    function seedDatabase() {
-        // Create default Admin if DB is empty
-        const adminId = 'u' + Date.now();
-        const updates = {};
-        updates['users/' + adminId] = {
-            id: adminId,
-            name: 'Admin',
-            email: 'edc@kprcas.ac.in',
-            pass: '1234',
-            role: 'admin'
-        };
-        update(ref(db), updates);
+    if (isAdmin) {
+      document.getElementById('btnAddMember').classList.remove('hidden');
+      document.getElementById('btnUpload').classList.remove('hidden');
+      document.getElementById('btnExportPdf').classList.remove('hidden');
+      document.getElementById('btnExportWord').classList.remove('hidden');
+    } else if (isMember) {
+      document.getElementById('btnUpload').classList.remove('hidden');
+    } else if (isViewer) {
+      document.getElementById('btnExportPdf').classList.remove('hidden');
+      document.getElementById('btnExportWord').classList.remove('hidden');
     }
 
-    // --- Auth Functions ---
-    window.handleUnifiedLogin = (e) => {
-        e.preventDefault();
-        const email = document.getElementById('loginEmail').value.trim();
-        const pass = document.getElementById('loginPass').value.trim();
+    renderSidebar();
+  }
 
-        // Find user in downloaded data
-        const usersArr = Object.values(globalData.users);
-        const user = usersArr.find(u => u.email === email && u.pass === pass);
+  function renderSidebar() {
+    const list = document.getElementById('navMenu');
+    list.innerHTML = '';
 
-        if (user) {
-            currentUser = user;
-            document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById('mainDashboard').classList.remove('hidden');
-            initDashboard();
-            showToast(`Connected as ${user.name}`);
-        } else {
-            showToast('Invalid ID or Password', 'error');
-        }
-    };
-
-    window.logout = () => {
-        currentUser = null;
-        currentTripId = null;
-        location.reload();
-    };
-
-    // --- Dashboard Logic ---
-    function initDashboard() {
-        document.getElementById('sidebarName').innerText = currentUser.name;
-        document.getElementById('sidebarRole').innerText = currentUser.role.toUpperCase();
-
-        // Controls Visibility
-        const isAdmin = currentUser.role === 'admin';
-        const isMember = currentUser.role === 'member';
-        const isViewer = currentUser.role === 'viewer';
-
-        if (isAdmin) {
-            document.getElementById('btnAddMember').classList.remove('hidden');
-            document.getElementById('btnUpload').classList.remove('hidden');
-            document.getElementById('btnExportPdf').classList.remove('hidden');
-            document.getElementById('btnExportWord').classList.remove('hidden');
-        } else if (isMember) {
-            document.getElementById('btnUpload').classList.remove('hidden');
-        } else if (isViewer) {
-            document.getElementById('btnExportPdf').classList.remove('hidden');
-            document.getElementById('btnExportWord').classList.remove('hidden');
-        }
-
-        renderSidebar();
+    if (currentUser.role === 'admin') {
+      list.innerHTML += `<li class="nav-item" onclick="window.openModal('createTripModal')" style="border:1px dashed rgba(255,255,255,0.5); justify-content:center;">+ New Trip</li>`;
     }
 
-    function renderSidebar() {
-        const list = document.getElementById('navMenu');
-        list.innerHTML = '';
-
-        if (currentUser.role === 'admin') {
-            list.innerHTML += `<li class="nav-item" onclick="window.openModal('createTripModal')" style="border:1px dashed rgba(255,255,255,0.5); justify-content:center;">+ New Trip</li>`;
-        }
-
-        const tripsArr = Object.values(globalData.trips);
-        const myTrips = currentUser.role === 'admin'
+    const tripsArr = Object.values(globalData.trips);
+    const myTrips = currentUser.role === 'admin'
             ? tripsArr
             : tripsArr.filter(t => t.members && t.members.includes(currentUser.id));
 
-        myTrips.forEach(t => {
-            const li = document.createElement('li');
-            li.className = `nav-item ${currentTripId === t.id ? 'active' : ''}`;
-            li.innerHTML = `<span>${t.name}</span>`;
-            li.onclick = () => loadTrip(t.id);
-            list.appendChild(li);
-        });
-    }
+    myTrips.forEach(t => {
+      const li = document.createElement('li');
+      li.className = `nav-item ${currentTripId === t.id ? 'active' : ''}`;
+      li.innerHTML = `<span>${t.name}</span>`;
+      li.onclick = () => loadTrip(t.id);
+      list.appendChild(li);
+    });
+  }
 
-    function loadTrip(id) {
-        currentTripId = id;
-        const trip = globalData.trips[id];
-        if (!trip) return; // Trip might have been deleted
+  function loadTrip(id) {
+    currentTripId = id;
+    const trip = globalData.trips[id];
+    if (!trip) return;
 
-        document.getElementById('pageTitle').innerText = trip.name;
-        renderSidebar();
-        document.getElementById('viewWelcome').classList.add('hidden');
-        document.getElementById('viewTrip').classList.remove('hidden');
+    document.getElementById('pageTitle').innerText = trip.name;
+    renderSidebar();
+    document.getElementById('viewWelcome').classList.add('hidden');
+    document.getElementById('viewTrip').classList.remove('hidden');
 
-        // Filter Expenses
-        const expensesArr = Object.values(globalData.expenses).filter(e => e.tripId === id);
+    // Filter Expenses
+    const expensesArr = Object.values(globalData.expenses).filter(e => e.tripId === id);
 
-        // Stats
-        const total = expensesArr.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
-        document.getElementById('statTotal').innerText = `₹${total.toLocaleString()}`;
-        document.getElementById('statDates').innerText = `${trip.start} to ${trip.end}`;
-        document.getElementById('statReceipts').innerText = expensesArr.length;
+    // Stats
+    const total = expensesArr.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
+    document.getElementById('statTotal').innerText = `₹${total.toLocaleString()}`;
+    document.getElementById('statDates').innerText = `${trip.start} to ${trip.end}`;
+    document.getElementById('statReceipts').innerText = expensesArr.length;
 
-        renderTable(expensesArr);
-        if (currentUser.role === 'admin') renderMembers(trip);
-    }
+    renderTable(expensesArr);
+    if (currentUser.role === 'admin') renderMembers(trip);
+  }
 
-    function renderTable(expenses) {
-        const tbody = document.getElementById('tableBody');
-        tbody.innerHTML = '';
+  function renderTable(expenses) {
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
 
-        expenses.forEach(e => {
-            const tr = document.createElement('tr');
-            const canDelete = currentUser.role === 'admin' || (currentUser.role === 'member' && e.uploadedBy === currentUser.id);
+    expenses.forEach(e => {
+      const tr = document.createElement('tr');
+      const canDelete = currentUser.role === 'admin' || (currentUser.role === 'member' && e.uploadedBy === currentUser.id);
 
-            const actionHtml = canDelete
-                ? `<button class="btn btn-outline" style="color:red; border-color:red;" onclick="window.deleteExpense('${e.id}')">Delete</button>`
-                : `-`;
+      const actionHtml = canDelete
+              ? `<button class="btn btn-outline" style="color:red; border-color:red;" onclick="window.deleteExpense('${e.id}')">Delete</button>`
+              : `-`;
 
-            const imgBtn = e.img ? `<button class="btn btn-outline" onclick="window.viewImage('${e.img}')">📷</button>` : `-`;
+      const imgBtn = e.img ? `<button class="btn btn-outline" onclick="window.viewImage('${e.img}')">📷</button>` : `-`;
 
-            tr.innerHTML = `
+      tr.innerHTML = `
         <td>${e.date}</td>
         <td>${e.place}</td>
         <td><span style="background:#dbeafe; color:#1e40af; padding:2px 8px; border-radius:10px; font-size:11px;">${e.cat}</span></td>
@@ -446,254 +418,234 @@
         <td>${imgBtn}</td>
         <td>${actionHtml}</td>
       `;
-            tbody.appendChild(tr);
-        });
-    }
+      tbody.appendChild(tr);
+    });
+  }
 
-    function renderMembers(trip) {
-        document.getElementById('adminMembersSection').classList.remove('hidden');
-        const tbody = document.getElementById('membersTableBody');
-        tbody.innerHTML = '';
+  function renderMembers(trip) {
+    document.getElementById('adminMembersSection').classList.remove('hidden');
+    const tbody = document.getElementById('membersTableBody');
+    tbody.innerHTML = '';
 
-        if (!trip.members) return;
+    if (!trip.members) return;
 
-        trip.members.forEach(memId => {
-            const mem = globalData.users[memId];
-            if (mem) {
-                tbody.innerHTML += `
+    trip.members.forEach(memId => {
+      const mem = globalData.users[memId];
+      if (mem) {
+        tbody.innerHTML += `
           <tr>
             <td>${mem.name}</td><td>${mem.email}</td>
             <td>${mem.role}</td>
             <td><button class="btn btn-outline" style="color:red;" onclick="window.removeMember('${mem.id}')">Remove</button></td>
           </tr>`;
-            }
-        });
-    }
+      }
+    });
+  }
 
-    // --- Actions (Writes to Firebase) ---
-    window.createTrip = (e) => {
-        e.preventDefault();
-        const tripRef = push(ref(db, 'trips'));
-        const newTrip = {
-            id: tripRef.key,
-            name: document.getElementById('newTripName').value,
-            start: document.getElementById('newTripStart').value,
-            end: document.getElementById('newTripEnd').value,
-            members: [currentUser.id]
-        };
-        set(tripRef, newTrip)
+  // --- Actions ---
+  window.createTrip = (e) => {
+    e.preventDefault();
+    const tripRef = push(ref(db, 'trips'));
+    const newTrip = {
+      id: tripRef.key,
+      name: document.getElementById('newTripName').value,
+      start: document.getElementById('newTripStart').value,
+      end: document.getElementById('newTripEnd').value,
+      members: [currentUser.id]
+    };
+    set(tripRef, newTrip)
             .then(() => {
-                window.closeModal('createTripModal');
-                showToast('Trip Created!');
+              window.closeModal('createTripModal');
+              showToast('Trip Created!');
             });
+  };
+
+  window.addMember = (e) => {
+    e.preventDefault();
+    const email = document.getElementById('newMemEmail').value;
+
+    // Check if user exists in DB
+    let targetUser = Object.values(globalData.users).find(u => u.email === email);
+
+    const proceedToAdd = (user) => {
+      const tripRef = ref(db, `trips/${currentTripId}/members`);
+      const currentMembers = globalData.trips[currentTripId].members || [];
+      if (currentMembers.includes(user.id)) {
+        showToast('User already in trip', 'error');
+        return;
+      }
+      const newMembers = [...currentMembers, user.id];
+      set(tripRef, newMembers).then(() => {
+        window.closeModal('addMemberModal');
+        showToast('Member Added');
+      });
     };
 
-    window.addMember = (e) => {
-        e.preventDefault();
-        const email = document.getElementById('newMemEmail').value;
-
-        // Check if user exists in DB
-        let targetUser = Object.values(globalData.users).find(u => u.email === email);
-
-        const proceedToAdd = (user) => {
-            const tripRef = ref(db, `trips/${currentTripId}/members`);
-            const currentMembers = globalData.trips[currentTripId].members || [];
-            if (currentMembers.includes(user.id)) {
-                showToast('User already in trip', 'error');
-                return;
-            }
-            const newMembers = [...currentMembers, user.id];
-            set(tripRef, newMembers).then(() => {
-                window.closeModal('addMemberModal');
-                showToast('Member Added');
-            });
-        };
-
-        if (targetUser) {
-            proceedToAdd(targetUser);
-        } else {
-            // Create new user
-            const userRef = push(ref(db, 'users'));
-            const newUser = {
-                id: userRef.key,
-                name: document.getElementById('newMemName').value,
-                email: email,
-                pass: document.getElementById('newMemPass').value,
-                role: document.getElementById('newMemRole').value
-            };
-            set(userRef, newUser).then(() => proceedToAdd(newUser));
-        }
-    };
-
-    window.removeMember = (memId) => {
-        if (!confirm('Remove this member?')) return;
-        const tripMembers = globalData.trips[currentTripId].members || [];
-        const newMembers = tripMembers.filter(id => id !== memId);
-        set(ref(db, `trips/${currentTripId}/members`), newMembers);
-    };
-
-    // --- Upload Expense (With Image Compression) ---
-    window.openUploadModal = () => {
-        if (!currentTripId) return;
-        const trip = globalData.trips[currentTripId];
-        const select = document.getElementById('expPayee');
-        select.innerHTML = '';
-
-        // Populate dropdown (Only Admin/Members, No Viewers)
-        if (trip.members) {
-            trip.members.forEach(uid => {
-                const u = globalData.users[uid];
-                if (u && u.role !== 'viewer') {
-                    const opt = document.createElement('option');
-                    opt.value = u.name;
-                    opt.innerText = u.name;
-                    select.appendChild(opt);
-                }
-            });
-        }
-        document.getElementById('expPreview').style.display = 'none';
-        window.openModal('uploadModal');
-    };
-
-    window.previewImage = (input) => {
-        const file = input.files[0];
-        if (!file) return;
-
-        document.getElementById('compressMsg').style.display = 'block';
-
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const img = new Image();
-            img.src = e.target.result;
-            img.onload = () => {
-                // Compress Logic: Resize to max width 800px
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                const maxWidth = 800;
-                let width = img.width;
-                let height = img.height;
-
-                if (width > maxWidth) {
-                    height *= maxWidth / width;
-                    width = maxWidth;
-                }
-
-                canvas.width = width;
-                canvas.height = height;
-                ctx.drawImage(img, 0, 0, width, height);
-
-                const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7); // 70% quality
-                document.getElementById('expPreview').src = compressedDataUrl;
-                document.getElementById('expPreview').style.display = 'block';
-                document.getElementById('compressMsg').style.display = 'none';
-            };
-        };
-        reader.readAsDataURL(file);
-    };
-
-    window.uploadExpense = (e) => {
-        e.preventDefault();
-        const expRef = push(ref(db, 'expenses'));
-        const newExp = {
-            id: expRef.key,
-            tripId: currentTripId,
-            uploadedBy: currentUser.id,
-            payee: document.getElementById('expPayee').value,
-            cat: document.getElementById('expCat').value,
-            amount: document.getElementById('expAmt').value,
-            place: document.getElementById('expPlace').value,
-            date: document.getElementById('expDate').value,
-            img: document.getElementById('expPreview').src || ''
-        };
-        set(expRef, newExp).then(() => {
-            window.closeModal('uploadModal');
-            showToast('Expense Uploaded');
-            e.target.reset();
-            document.getElementById('expPreview').style.display = 'none';
-        });
-    };
-
-    window.deleteExpense = (id) => {
-        if (confirm('Delete expense?')) {
-            remove(ref(db, `expenses/${id}`));
-        }
-    };
-
-    // --- Helpers ---
-    window.viewImage = (src) => {
-        document.getElementById('fullImg').src = src;
-        document.getElementById('imgViewer').classList.add('active');
-    };
-    window.openModal = (id) => document.getElementById(id).classList.add('active');
-    window.closeModal = (id) => document.getElementById(id).classList.remove('active');
-    function showToast(msg, type='success') {
-        const t = document.createElement('div');
-        t.className = `toast ${type}`;
-        t.innerText = msg;
-        document.getElementById('toast-container').appendChild(t);
-        setTimeout(() => t.remove(), 3000);
+    if (targetUser) {
+      proceedToAdd(targetUser);
+    } else {
+      const userRef = push(ref(db, 'users'));
+      const newUser = {
+        id: userRef.key,
+        name: document.getElementById('newMemName').value,
+        email: email,
+        pass: document.getElementById('newMemPass').value,
+        role: document.getElementById('newMemRole').value
+      };
+      set(userRef, newUser).then(() => proceedToAdd(newUser));
     }
+  };
 
-    // --- Exports ---
-    window.exportToPDF = () => {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        const trip = globalData.trips[currentTripId];
-        const exps = Object.values(globalData.expenses).filter(e => e.tripId === currentTripId);
+  window.removeMember = (memId) => {
+    if (!confirm('Remove this member?')) return;
+    const tripMembers = globalData.trips[currentTripId].members || [];
+    const newMembers = tripMembers.filter(id => id !== memId);
+    set(ref(db, `trips/${currentTripId}/members`), newMembers);
+  };
 
-        doc.text(`Trip: ${trip.name}`, 14, 20);
-        doc.setFontSize(10);
-        doc.text(`Date: ${trip.start}`, 14, 26);
+  window.openUploadModal = () => {
+    if (!currentTripId) return;
+    const trip = globalData.trips[currentTripId];
+    const select = document.getElementById('expPayee');
+    select.innerHTML = '';
+    if (trip.members) {
+      trip.members.forEach(uid => {
+        const u = globalData.users[uid];
+        if (u && u.role !== 'viewer') {
+          const opt = document.createElement('option');
+          opt.value = u.name;
+          opt.innerText = u.name;
+          select.appendChild(opt);
+        }
+      });
+    }
+    document.getElementById('expPreview').style.display = 'none';
+    window.openModal('uploadModal');
+  };
 
-        const body = exps.map(e => [e.date, e.place, e.cat, e.payee, e.amount, '']);
-
-        doc.autoTable({
-            head: [['Date', 'Place', 'Category', 'Payee', 'Amt', 'Pic']],
-            body: body,
-            startY: 30,
-            columnStyles: { 5: { cellWidth: 20, minCellHeight: 15 } },
-            didDrawCell: (data) => {
-                if (data.column.index === 5 && data.cell.section === 'body') {
-                    const imgData = exps[data.row.index].img;
-                    if (imgData) {
-                        try { doc.addImage(imgData, 'JPEG', data.cell.x+2, data.cell.y+2, 15, 10); } catch(e){}
-                    }
-                }
-            }
-        });
-        doc.save('Report.pdf');
+  window.previewImage = (input) => {
+    const file = input.files[0];
+    if (!file) return;
+    document.getElementById('compressMsg').style.display = 'block';
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.src = e.target.result;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const maxWidth = 800;
+        let width = img.width;
+        let height = img.height;
+        if (width > maxWidth) {
+          height *= maxWidth / width;
+          width = maxWidth;
+        }
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+        document.getElementById('expPreview').src = compressedDataUrl;
+        document.getElementById('expPreview').style.display = 'block';
+        document.getElementById('compressMsg').style.display = 'none';
+      };
     };
+    reader.readAsDataURL(file);
+  };
 
-    window.exportToWord = () => {
-        const { Document, Packer, Paragraph, Table, TableCell, TableRow, WidthType, ImageRun, TextRun } = docx;
-        const trip = globalData.trips[currentTripId];
-        const exps = Object.values(globalData.expenses).filter(e => e.tripId === currentTripId);
-
-        const rows = exps.map(e => {
-            let imgPara = new Paragraph("No Img");
-            if (e.img && e.img.includes('base64')) {
-                const base64 = e.img.split(',')[1];
-                imgPara = new Paragraph({ children: [ new ImageRun({ data: Uint8Array.from(atob(base64), c=>c.charCodeAt(0)), transformation: {width:50, height:50} }) ] });
-            }
-            return new TableRow({ children: [
-                    new TableCell({children:[new Paragraph(e.date)]}),
-                    new TableCell({children:[new Paragraph(e.place)]}),
-                    new TableCell({children:[new Paragraph(e.payee)]}),
-                    new TableCell({children:[new Paragraph(e.amount)]}),
-                    new TableCell({children:[imgPara]})
-                ]});
-        });
-
-        const doc = new Document({ sections: [{ children: [
-                    new Paragraph({text: trip.name, heading:"Heading1"}),
-                    new Table({ width:{size:100, type:WidthType.PERCENTAGE}, rows: [
-                            new TableRow({children:['Date','Place','Payee','Amt','Pic'].map(t=>new TableCell({children:[new Paragraph({text:t, bold:true})], shading:{fill:"84cc16"}}))}),
-                            ...rows
-                        ]})
-                ]}]});
-
-        Packer.toBlob(doc).then(blob => saveAs(blob, 'Report.docx'));
+  window.uploadExpense = (e) => {
+    e.preventDefault();
+    const expRef = push(ref(db, 'expenses'));
+    const newExp = {
+      id: expRef.key,
+      tripId: currentTripId,
+      uploadedBy: currentUser.id,
+      payee: document.getElementById('expPayee').value,
+      cat: document.getElementById('expCat').value,
+      amount: document.getElementById('expAmt').value,
+      place: document.getElementById('expPlace').value,
+      date: document.getElementById('expDate').value,
+      img: document.getElementById('expPreview').src || ''
     };
+    set(expRef, newExp).then(() => {
+      window.closeModal('uploadModal');
+      showToast('Expense Uploaded');
+      e.target.reset();
+      document.getElementById('expPreview').style.display = 'none';
+    });
+  };
+
+  window.deleteExpense = (id) => {
+    if (confirm('Delete expense?')) {
+      remove(ref(db, `expenses/${id}`));
+    }
+  };
+
+  window.viewImage = (src) => {
+    document.getElementById('fullImg').src = src;
+    document.getElementById('imgViewer').classList.add('active');
+  };
+  window.openModal = (id) => document.getElementById(id).classList.add('active');
+  window.closeModal = (id) => document.getElementById(id).classList.remove('active');
+  function showToast(msg, type='success') {
+    const t = document.createElement('div');
+    t.className = `toast ${type}`;
+    t.innerText = msg;
+    document.getElementById('toast-container').appendChild(t);
+    setTimeout(() => t.remove(), 3000);
+  }
+
+  window.exportToPDF = () => {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const trip = globalData.trips[currentTripId];
+    const exps = Object.values(globalData.expenses).filter(e => e.tripId === currentTripId);
+    doc.text(`Trip: ${trip.name}`, 14, 20);
+    doc.setFontSize(10);
+    doc.text(`Date: ${trip.start}`, 14, 26);
+    const body = exps.map(e => [e.date, e.place, e.cat, e.payee, e.amount, '']);
+    doc.autoTable({
+      head: [['Date', 'Place', 'Category', 'Payee', 'Amt', 'Pic']],
+      body: body,
+      startY: 30,
+      columnStyles: { 5: { cellWidth: 20, minCellHeight: 15 } },
+      didDrawCell: (data) => {
+        if (data.column.index === 5 && data.cell.section === 'body') {
+          const imgData = exps[data.row.index].img;
+          if (imgData) { try { doc.addImage(imgData, 'JPEG', data.cell.x+2, data.cell.y+2, 15, 10); } catch(e){} }
+        }
+      }
+    });
+    doc.save('Report.pdf');
+  };
+
+  window.exportToWord = () => {
+    const { Document, Packer, Paragraph, Table, TableCell, TableRow, WidthType, ImageRun, TextRun } = docx;
+    const trip = globalData.trips[currentTripId];
+    const exps = Object.values(globalData.expenses).filter(e => e.tripId === currentTripId);
+    const rows = exps.map(e => {
+      let imgPara = new Paragraph("No Img");
+      if (e.img && e.img.includes('base64')) {
+        const base64 = e.img.split(',')[1];
+        imgPara = new Paragraph({ children: [ new ImageRun({ data: Uint8Array.from(atob(base64), c=>c.charCodeAt(0)), transformation: {width:50, height:50} }) ] });
+      }
+      return new TableRow({ children: [
+          new TableCell({children:[new Paragraph(e.date)]}),
+          new TableCell({children:[new Paragraph(e.place)]}),
+          new TableCell({children:[new Paragraph(e.payee)]}),
+          new TableCell({children:[new Paragraph(e.amount)]}),
+          new TableCell({children:[imgPara]})
+        ]});
+    });
+    const doc = new Document({ sections: [{ children: [
+          new Paragraph({text: trip.name, heading:"Heading1"}),
+          new Table({ width:{size:100, type:WidthType.PERCENTAGE}, rows: [
+              new TableRow({children:['Date','Place','Payee','Amt','Pic'].map(t=>new TableCell({children:[new Paragraph({text:t, bold:true})], shading:{fill:"84cc16"}}))}),
+              ...rows
+            ]})
+        ]}]});
+    Packer.toBlob(doc).then(blob => saveAs(blob, 'Report.docx'));
+  };
 
 </script>
 </body>
